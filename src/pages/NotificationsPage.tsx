@@ -1,8 +1,7 @@
-
-import { useState } from 'react';
+import React from 'react';
 import PageLayout from '@/components/layout/PageLayout';
-import PageHeader from '@/components/layout/PageHeader';
-import Tabs from '@/components/ui/Tabs';
+import { cn } from '@/lib/utils';
+import { Tabs } from '@/components/ui/tabs-custom';
 import ActionButton from '@/components/ui/ActionButton';
 import { Settings } from 'lucide-react';
 

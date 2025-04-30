@@ -6,7 +6,7 @@ import {
   Package, 
   Box, 
   Route, 
-  Fleet, 
+  Car, // Replacing Fleet with Car icon
   Users, 
   Bell, 
   BarChart, 
@@ -24,7 +24,7 @@ const navItems = [
   { name: 'Returnables', icon: Package, path: '/returnables' },
   { name: 'Orders', icon: Box, path: '/orders' },
   { name: 'Routing', icon: Route, path: '/routing' },
-  { name: 'Fleet', icon: Fleet, path: '/fleet' },
+  { name: 'Fleet', icon: Car, path: '/fleet' }, // Updated to use Car icon
   { name: 'Customers', icon: Users, path: '/customers' },
   { name: 'Alerts', icon: Bell, path: '/alerts' },
   { name: 'KPIs', icon: BarChart, path: '/kpis' },
