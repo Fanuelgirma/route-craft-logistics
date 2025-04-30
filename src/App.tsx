@@ -11,6 +11,9 @@ import CustomersPage from "./pages/CustomersPage";
 import SubRegionsPage from "./pages/SubRegionsPage";
 import MapPage from "./pages/MapPage";
 import NotificationsPage from "./pages/NotificationsPage";
+import KPIsPage from "./pages/KPIsPage";
+import AlertsPage from "./pages/AlertsPage";
+import LiveMapPage from "./pages/LiveMapPage";
 
 const queryClient = new QueryClient();
 
@@ -28,6 +31,9 @@ const App = () => (
           <Route path="/subregions" element={<SubRegionsPage />} />
           <Route path="/map" element={<MapPage />} />
           <Route path="/notifications" element={<NotificationsPage />} />
+          <Route path="/kpis" element={<KPIsPage />} />
+          <Route path="/alerts" element={<AlertsPage />} />
+          <Route path="/livemap" element={<LiveMapPage />} />
           
           {/* Placeholder routes for sidebar navigation */}
           <Route path="/dashboard" element={<Navigate to="/customers" />} />
@@ -36,8 +42,6 @@ const App = () => (
           <Route path="/orders" element={<Navigate to="/customers" />} />
           <Route path="/routing" element={<Navigate to="/customers" />} />
           <Route path="/fleet" element={<Navigate to="/customers" />} />
-          <Route path="/alerts" element={<Navigate to="/customers" />} />
-          <Route path="/kpis" element={<Navigate to="/customers" />} />
           <Route path="/sales" element={<Navigate to="/customers" />} />
           <Route path="/settings" element={<Navigate to="/customers" />} />
           
