@@ -23,7 +23,11 @@ const ViewAlertModal: React.FC<ViewAlertModalProps> = ({ alert, onClose }) => {
   };
 
   return (
-    <Modal title={`Alert Details: ${alert.kpiName}`} onClose={onClose}>
+    <Modal 
+      isOpen={true}
+      title={`Alert Details: ${alert.kpiName}`} 
+      onClose={onClose}
+    >
       <div className="space-y-4">
         <div className="bg-gray-50 p-4 rounded-md">
           <p className="font-medium">Alert Message:</p>

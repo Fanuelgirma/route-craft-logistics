@@ -96,7 +96,12 @@ const EditKpiModal: React.FC<EditKpiModalProps> = ({ kpi: initialKpi, onClose, o
   };
 
   return (
-    <Modal title={`Edit KPI: ${initialKpi.name}`} onClose={onClose} size="lg">
+    <Modal 
+      isOpen={true}
+      title={`Edit KPI: ${initialKpi.name}`} 
+      onClose={onClose} 
+      size="lg"
+    >
       <div className="mb-6">
         <div className="flex border-b border-gray-200">
           <button

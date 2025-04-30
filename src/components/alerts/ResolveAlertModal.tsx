@@ -28,6 +28,7 @@ const ResolveAlertModal: React.FC<ResolveAlertModalProps> = ({ alert, selectedCo
 
   return (
     <Modal 
+      isOpen={true}
       title={alert 
         ? `Resolve Alert: ${alert.kpiName}` 
         : `Resolve ${selectedCount} Selected Alerts`

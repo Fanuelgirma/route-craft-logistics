@@ -4,7 +4,7 @@ import { X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface ModalProps {
-  isOpen: boolean;
+  isOpen?: boolean;
   onClose: () => void;
   title: string;
   children: ReactNode;
@@ -12,7 +12,7 @@ interface ModalProps {
   size?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
 }
 
-export default function Modal({ isOpen, onClose, title, children, footer, size = 'md' }: ModalProps) {
+export default function Modal({ isOpen = true, onClose, title, children, footer, size = 'md' }: ModalProps) {
   // Prevent body scroll when modal is open
   useEffect(() => {
     if (isOpen) {

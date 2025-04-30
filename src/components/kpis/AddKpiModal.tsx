@@ -71,7 +71,12 @@ const AddKpiModal: React.FC<AddKpiModalProps> = ({ onClose, onAdd }) => {
   };
 
   return (
-    <Modal title="Add KPI" onClose={onClose} size="lg">
+    <Modal 
+      isOpen={true}
+      title="Add KPI" 
+      onClose={onClose} 
+      size="lg"
+    >
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">KPI Name</label>
