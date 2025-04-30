@@ -154,13 +154,18 @@ export default function DataTable<T>({
                     </td>
                   )}
                   {columns.map((column, colIndex) => {
-                    const value = typeof column.accessor === 'function' 
-                      ? column.accessor(row)
-                      : column.cell 
-                        ? column.cell(row)
-                        : row[column.accessor as keyof T];
+                    let displayValue: ReactNode;
                     
-                    return <td key={colIndex}>{value}</td>;
+                    if (typeof column.accessor === 'function') {
+                      displayValue = column.accessor(row);
+                    } else if (column.cell) {
+                      displayValue = column.cell(row);
+                    } else {
+                      // Type assertion to ReactNode to handle the TypeScript error
+                      displayValue = String(row[column.accessor as keyof T]);
+                    }
+                    
+                    return <td key={colIndex}>{displayValue}</td>;
                   })}
                 </tr>
               ))

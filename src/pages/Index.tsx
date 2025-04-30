@@ -1,8 +1,9 @@
 
-import { useNavigate as useReactRouterNavigate, useEffect } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 const Index = () => {
-  const navigate = useReactRouterNavigate();
+  const navigate = useNavigate();
   
   // Redirect to customers page
   useEffect(() => {
