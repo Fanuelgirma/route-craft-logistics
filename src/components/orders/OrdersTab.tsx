@@ -155,6 +155,9 @@ export default function OrdersTab() {
     setIsDrawerOpen(true);
   };
 
+  // Create an array of all possible status values plus 'All'
+  const statusOptions: Array<OrderStatus | 'All'> = ['All', 'Pending', 'Ready For Dispatch', 'In Transit', 'Arrived At Customer', 'Completed', 'Cancelled'];
+
   return (
     <div className="space-y-4">
       <div className="flex justify-end gap-2">
@@ -178,7 +181,7 @@ export default function OrdersTab() {
       
       <div className="border-b border-gray-200 pb-1">
         <div className="flex space-x-6 overflow-x-auto">
-          {(['All'] as const).concat(['Pending', 'Ready For Dispatch', 'In Transit', 'Arrived At Customer', 'Completed', 'Cancelled']).map((status) => (
+          {statusOptions.map((status) => (
             <button
               key={status}
               className={`py-2 whitespace-nowrap ${
