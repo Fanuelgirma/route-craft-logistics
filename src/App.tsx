@@ -14,6 +14,8 @@ import NotificationsPage from "./pages/NotificationsPage";
 import KPIsPage from "./pages/KPIsPage";
 import AlertsPage from "./pages/AlertsPage";
 import LiveMapPage from "./pages/LiveMapPage";
+import TripsPage from "./pages/TripsPage";
+import TripDetailPage from "./pages/TripDetailPage";
 
 const queryClient = new QueryClient();
 
@@ -27,6 +29,8 @@ const App = () => (
           <Route path="/" element={<Index />} />
           
           {/* Main sections */}
+          <Route path="/trips" element={<TripsPage />} />
+          <Route path="/trips/:tripId" element={<TripDetailPage />} />
           <Route path="/customers" element={<CustomersPage />} />
           <Route path="/subregions" element={<SubRegionsPage />} />
           <Route path="/map" element={<MapPage />} />
@@ -36,14 +40,13 @@ const App = () => (
           <Route path="/livemap" element={<LiveMapPage />} />
           
           {/* Placeholder routes for sidebar navigation */}
-          <Route path="/dashboard" element={<Navigate to="/customers" />} />
-          <Route path="/trips" element={<Navigate to="/customers" />} />
-          <Route path="/returnables" element={<Navigate to="/customers" />} />
-          <Route path="/orders" element={<Navigate to="/customers" />} />
-          <Route path="/routing" element={<Navigate to="/customers" />} />
-          <Route path="/fleet" element={<Navigate to="/customers" />} />
-          <Route path="/sales" element={<Navigate to="/customers" />} />
-          <Route path="/settings" element={<Navigate to="/customers" />} />
+          <Route path="/dashboard" element={<Navigate to="/trips" />} />
+          <Route path="/returnables" element={<Navigate to="/trips" />} />
+          <Route path="/orders" element={<Navigate to="/trips" />} />
+          <Route path="/routing" element={<Navigate to="/trips" />} />
+          <Route path="/fleet" element={<Navigate to="/trips" />} />
+          <Route path="/sales" element={<Navigate to="/trips" />} />
+          <Route path="/settings" element={<Navigate to="/trips" />} />
           
           {/* Catch-all route */}
           <Route path="*" element={<NotFound />} />

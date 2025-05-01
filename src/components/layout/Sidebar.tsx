@@ -13,7 +13,8 @@ import {
   Map, 
   Settings, 
   ChevronRight, 
-  ChevronLeft 
+  ChevronLeft,
+  DollarSign
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Link, useLocation } from 'react-router-dom';
@@ -29,7 +30,7 @@ const navItems = [
   { name: 'Alerts', icon: Bell, path: '/alerts' },
   { name: 'KPIs', icon: BarChart, path: '/kpis' },
   { name: 'Live Map', icon: Map, path: '/livemap' },
-  { name: 'Sales', icon: BarChart, path: '/sales' },
+  { name: 'Sales', icon: DollarSign, path: '/sales' },
   { name: 'Settings', icon: Settings, path: '/settings', hasSubmenu: true },
 ];
 
@@ -37,6 +38,7 @@ export default function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
   const location = useLocation();
   const currentPath = location.pathname;
+  const currentPathBase = '/' + currentPath.split('/')[1]; // Get base path for active state
 
   return (
     <div className={cn(
@@ -66,10 +68,10 @@ export default function Sidebar() {
               to={item.path}
               className={cn(
                 "sidebar-item",
-                currentPath === item.path && "active"
+                currentPathBase === item.path && "active"
               )}
             >
-              <item.icon className={currentPath === item.path ? "text-logistic-accent" : ""} />
+              <item.icon className={currentPathBase === item.path ? "text-logistic-accent" : ""} />
               {!collapsed && (
                 <span className="flex-1">{item.name}</span>
               )}
