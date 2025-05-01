@@ -10,4 +10,5 @@ export interface Alert {
   sentAt: string;
   resolvedAt?: string;
   resolvedBy?: string;
+  resolutionReason?: string;
 }

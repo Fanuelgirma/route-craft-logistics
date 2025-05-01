@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { format } from 'date-fns';
 import { Search, Plus, Download } from 'lucide-react';
@@ -46,6 +45,7 @@ const mockAlerts: Alert[] = [
     sentAt: '2025-03-15T12:35:00Z',
     resolvedAt: '2025-02-14T09:27:00Z',
     resolvedBy: 'DEMO ADMIN',
+    resolutionReason: 'Issue was resolved by driver',
   },
   {
     id: '5',
@@ -56,6 +56,7 @@ const mockAlerts: Alert[] = [
     sentAt: '2024-09-26T10:14:00Z',
     resolvedAt: '2024-10-07T12:46:00Z',
     resolvedBy: 'DEMO ADMIN',
+    resolutionReason: 'No longer relevant',
   },
   {
     id: '6',
@@ -66,6 +67,7 @@ const mockAlerts: Alert[] = [
     sentAt: '2024-09-26T10:14:00Z',
     resolvedAt: '2024-10-07T12:46:00Z',
     resolvedBy: 'DEMO ADMIN',
+    resolutionReason: 'Driver has departed',
   }
 ];
 
@@ -214,7 +216,6 @@ const AlertsPage = () => {
         {selectedAlert && isViewModalOpen && (
           <ViewAlertModal
             alert={selectedAlert}
-            open={isViewModalOpen}
             onClose={handleCloseViewModal}
           />
         )}
@@ -222,10 +223,9 @@ const AlertsPage = () => {
         {isResolveModalOpen && (
           <ResolveAlertModal
             alert={selectedAlert}
-            open={isResolveModalOpen}
+            selectedCount={selectedAlerts.size}
             onClose={handleCloseResolveModal}
-            onSubmit={handleResolveSubmit}
-            isBulkResolve={!selectedAlert}
+            onResolve={handleResolveSubmit}
           />
         )}
       </div>

@@ -9,8 +9,8 @@ interface ViewAlertModalProps {
 }
 
 const ViewAlertModal: React.FC<ViewAlertModalProps> = ({ alert, onClose }) => {
-  const formatDate = (date: Date | null) => {
-    if (!date) return '-';
+  const formatDate = (dateString: string | undefined) => {
+    if (!dateString) return '-';
     return new Intl.DateTimeFormat('en-US', {
       year: 'numeric',
       month: 'long',
@@ -19,7 +19,7 @@ const ViewAlertModal: React.FC<ViewAlertModalProps> = ({ alert, onClose }) => {
       minute: '2-digit',
       second: '2-digit',
       hour12: true
-    }).format(new Date(date));
+    }).format(new Date(dateString));
   };
 
   return (
