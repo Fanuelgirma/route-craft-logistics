@@ -1,5 +1,5 @@
 
-export type AlertStatus = 'Resolved' | 'Unresolved' | 'All';
+export type AlertStatus = 'Resolved' | 'Unresolved';
 
 export interface Alert {
   id: string;
@@ -7,8 +7,7 @@ export interface Alert {
   driver: string;
   message: string;
   status: AlertStatus;
-  sentAt: Date;
-  resolvedAt: Date | null;
-  resolvedBy: string | null;
-  resolutionReason?: string;
+  sentAt: string;
+  resolvedAt?: string;
+  resolvedBy?: string;
 }

@@ -36,9 +36,9 @@ const App = () => (
           <Route path="/trips" element={<TripsPage />} />
           <Route path="/trips/:tripId" element={<TripDetailPage />} />
           <Route path="/customers" element={<CustomersPage />} />
-          <Route path="/subregions" element={<SubRegionsPage />} />
-          <Route path="/map" element={<MapPage />} />
-          <Route path="/notifications" element={<NotificationsPage />} />
+          <Route path="/customers/sub-regions" element={<SubRegionsPage />} />
+          <Route path="/customers/map" element={<MapPage />} />
+          <Route path="/customers/notifications" element={<NotificationsPage />} />
           <Route path="/kpis" element={<KPIsPage />} />
           <Route path="/alerts" element={<AlertsPage />} />
           <Route path="/livemap" element={<LiveMapPage />} />
