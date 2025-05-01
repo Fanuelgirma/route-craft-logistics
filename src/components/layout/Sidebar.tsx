@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { 
   LayoutDashboard, 
@@ -47,6 +46,7 @@ export default function Sidebar() {
   };
   
   return (
+    
     <div className={cn(
       "h-screen bg-white border-r border-gray-200 transition-all duration-300 flex flex-col",
       collapsed ? "w-16" : "w-56"

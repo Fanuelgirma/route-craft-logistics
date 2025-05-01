@@ -20,6 +20,8 @@ import FleetPage from "./pages/FleetPage";
 import VehicleDetailPage from "./pages/fleet/VehicleDetailPage";
 import DriverDetailPage from "./pages/fleet/DriverDetailPage";
 import OrdersPage from "./pages/OrdersPage";
+import RoutingPage from "./pages/RoutingPage";
+import RouteBuilderPage from "./pages/RouteBuilderPage";
 
 const queryClient = new QueryClient();
 
@@ -44,6 +46,8 @@ const App = () => (
           <Route path="/livemap" element={<LiveMapPage />} />
           <Route path="/orders" element={<OrdersPage />} />
           <Route path="/orders/products" element={<OrdersPage />} />
+          <Route path="/routing" element={<RoutingPage />} />
+          <Route path="/routing/builder/:batchId" element={<RouteBuilderPage />} />
           
           {/* Fleet section */}
           <Route path="/fleet" element={<FleetPage />} />
@@ -53,7 +57,6 @@ const App = () => (
           {/* Placeholder routes for sidebar navigation */}
           <Route path="/dashboard" element={<Navigate to="/trips" />} />
           <Route path="/returnables" element={<Navigate to="/trips" />} />
-          <Route path="/routing" element={<Navigate to="/trips" />} />
           <Route path="/sales" element={<Navigate to="/trips" />} />
           <Route path="/settings" element={<Navigate to="/trips" />} />
           
