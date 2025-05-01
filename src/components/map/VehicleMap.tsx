@@ -41,7 +41,7 @@ const VehicleMap: React.FC<VehicleMapProps> = ({ vehicles, selectedVehicle, onSe
           <Map size={48} className="mx-auto mb-2 text-gray-400" />
           <p className="text-gray-500">
             {vehicles.length} vehicles on the map
-            {selectedVehicle && `, centered on ${selectedVehicle.plate}`}
+            {selectedVehicle && `, centered on ${selectedVehicle.regNo || selectedVehicle.plate}`}
           </p>
           <p className="text-gray-400 text-sm">
             Map placeholder - implement with Mapbox or Google Maps
@@ -55,7 +55,7 @@ const VehicleMap: React.FC<VehicleMapProps> = ({ vehicles, selectedVehicle, onSe
                 className="flex flex-col items-center p-2 border border-gray-200 rounded hover:bg-gray-50 cursor-pointer"
               >
                 <MapPin size={24} color={statusColors[vehicle.status]} />
-                <p className="text-xs font-medium mt-1">{vehicle.plate}</p>
+                <p className="text-xs font-medium mt-1">{vehicle.regNo || vehicle.plate}</p>
               </div>
             ))}
           </div>

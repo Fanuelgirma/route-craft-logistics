@@ -15,7 +15,16 @@ export interface Vehicle {
   driverId?: string;
   driverName?: string;
   driverPhone?: string;
+  // Adding these properties needed by LiveMapPage
+  plate?: string; 
+  driver?: string;
+  location?: {
+    lat: number;
+    lng: number;
+  };
 }
+
+export type VehicleStatus = 'Available' | 'Scheduled' | 'Dispatched' | 'In Transit' | 'Offline';
 
 export interface Region {
   id: string;

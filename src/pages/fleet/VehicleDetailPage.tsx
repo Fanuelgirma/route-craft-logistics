@@ -38,21 +38,18 @@ export default function VehicleDetailPage() {
   };
   
   return (
-    <PageLayout 
-      title={
-        <div className="flex items-center space-x-2">
-          <Button variant="outline" size="sm" onClick={goBack}>
-            <ArrowLeft className="h-4 w-4 mr-1" /> Back
-          </Button>
-          <div>Vehicle Details</div>
-        </div>
-      }
-      breadcrumb={
-        <div className="text-sm text-gray-500">
-          Fleet » Vehicles » {vehicle.regNo}
-        </div>
-      }
-    >
+    <PageLayout>
+      <div className="flex items-center space-x-2 mb-4">
+        <Button variant="outline" size="sm" onClick={goBack}>
+          <ArrowLeft className="h-4 w-4 mr-1" /> Back
+        </Button>
+        <div className="text-2xl font-bold">Vehicle Details</div>
+      </div>
+      
+      <div className="text-sm text-gray-500 mb-4">
+        Fleet » Vehicles » {vehicle.regNo}
+      </div>
+      
       <div className="space-y-6">
         <div className="flex justify-between items-center">
           <div className="flex items-center">

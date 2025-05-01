@@ -8,14 +8,110 @@ import { Vehicle, VehicleStatus } from '@/types/vehicle';
 
 // Mock data
 const mockVehicles: Vehicle[] = [
-  { id: '1', plate: 'KCD 123A', driver: 'John Doe', status: 'Available', location: { lat: -1.286389, lng: 36.817223 } },
-  { id: '2', plate: 'KBZ 456B', driver: 'Jane Smith', status: 'In Transit', location: { lat: -1.291389, lng: 36.827223 } },
-  { id: '3', plate: 'KDA 789C', driver: 'Mark Johnson', status: 'Scheduled', location: { lat: -1.281389, lng: 36.807223 } },
-  { id: '4', plate: 'KDB 012D', driver: 'Sarah Williams', status: 'Dispatched', location: { lat: -1.296389, lng: 36.837223 } },
-  { id: '5', plate: 'KCF 345E', driver: 'Robert Brown', status: 'Offline', location: { lat: -1.276389, lng: 36.797223 } },
-  { id: '6', plate: 'KAZ 678F', driver: 'Emily Davis', status: 'In Transit', location: { lat: -1.301389, lng: 36.847223 } },
-  { id: '7', plate: 'KBX 901G', driver: 'Michael Wilson', status: 'Available', location: { lat: -1.271389, lng: 36.787223 } },
-  { id: '8', plate: 'KDC 234H', driver: 'Lisa Miller', status: 'Scheduled', location: { lat: -1.306389, lng: 36.857223 } },
+  { 
+    id: '1', 
+    vinNumber: '', 
+    regNo: 'KCD 123A', 
+    model: '', 
+    vehicleType: '', 
+    depot: '', 
+    status: 'Available', 
+    plate: 'KCD 123A', 
+    driver: 'John Doe', 
+    driverName: 'John Doe',
+    location: { lat: -1.286389, lng: 36.817223 } 
+  },
+  { 
+    id: '2', 
+    vinNumber: '', 
+    regNo: 'KBZ 456B', 
+    model: '', 
+    vehicleType: '', 
+    depot: '', 
+    status: 'In Transit', 
+    plate: 'KBZ 456B', 
+    driver: 'Jane Smith', 
+    driverName: 'Jane Smith',
+    location: { lat: -1.291389, lng: 36.827223 } 
+  },
+  { 
+    id: '3', 
+    vinNumber: '', 
+    regNo: 'KDA 789C', 
+    model: '', 
+    vehicleType: '', 
+    depot: '', 
+    status: 'Scheduled', 
+    plate: 'KDA 789C', 
+    driver: 'Mark Johnson', 
+    driverName: 'Mark Johnson',
+    location: { lat: -1.281389, lng: 36.807223 } 
+  },
+  { 
+    id: '4', 
+    vinNumber: '', 
+    regNo: 'KDB 012D', 
+    model: '', 
+    vehicleType: '', 
+    depot: '', 
+    status: 'Dispatched', 
+    plate: 'KDB 012D', 
+    driver: 'Sarah Williams', 
+    driverName: 'Sarah Williams',
+    location: { lat: -1.296389, lng: 36.837223 } 
+  },
+  { 
+    id: '5', 
+    vinNumber: '', 
+    regNo: 'KCF 345E', 
+    model: '', 
+    vehicleType: '', 
+    depot: '', 
+    status: 'Offline', 
+    plate: 'KCF 345E', 
+    driver: 'Robert Brown', 
+    driverName: 'Robert Brown',
+    location: { lat: -1.276389, lng: 36.797223 } 
+  },
+  { 
+    id: '6', 
+    vinNumber: '', 
+    regNo: 'KAZ 678F', 
+    model: '', 
+    vehicleType: '', 
+    depot: '', 
+    status: 'In Transit', 
+    plate: 'KAZ 678F', 
+    driver: 'Emily Davis', 
+    driverName: 'Emily Davis',
+    location: { lat: -1.301389, lng: 36.847223 } 
+  },
+  { 
+    id: '7', 
+    vinNumber: '', 
+    regNo: 'KBX 901G', 
+    model: '', 
+    vehicleType: '', 
+    depot: '', 
+    status: 'Available', 
+    plate: 'KBX 901G', 
+    driver: 'Michael Wilson', 
+    driverName: 'Michael Wilson',
+    location: { lat: -1.271389, lng: 36.787223 } 
+  },
+  { 
+    id: '8', 
+    vinNumber: '', 
+    regNo: 'KDC 234H', 
+    model: '', 
+    vehicleType: '', 
+    depot: '', 
+    status: 'Scheduled', 
+    plate: 'KDC 234H', 
+    driver: 'Lisa Miller', 
+    driverName: 'Lisa Miller',
+    location: { lat: -1.306389, lng: 36.857223 } 
+  },
 ];
 
 const statusCounts = {
@@ -27,7 +123,8 @@ const statusCounts = {
   Offline: mockVehicles.filter(v => v.status === 'Offline').length,
 };
 
-const statusColors: Record<VehicleStatus, string> = {
+const statusColors: Record<VehicleStatus | 'All', string> = {
+  'All': 'bg-gray-100 text-gray-800',
   'Available': 'bg-green-100 text-green-800',
   'Scheduled': 'bg-blue-100 text-blue-800',
   'Dispatched': 'bg-purple-100 text-purple-800',
@@ -63,8 +160,8 @@ const LiveMapPage = () => {
 
   const filteredVehicles = mockVehicles.filter(vehicle => {
     const matchesSearch = !searchTerm || 
-      vehicle.plate.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      vehicle.driver.toLowerCase().includes(searchTerm.toLowerCase());
+      (vehicle.regNo || vehicle.plate || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (vehicle.driverName || vehicle.driver || '').toLowerCase().includes(searchTerm.toLowerCase());
     
     const matchesStatus = selectedStatus === 'All' || vehicle.status === selectedStatus;
     
@@ -122,8 +219,8 @@ const LiveMapPage = () => {
                 >
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="font-semibold">{vehicle.plate}</p>
-                      <p className="text-sm text-gray-600">{vehicle.driver}</p>
+                      <p className="font-semibold">{vehicle.regNo || vehicle.plate}</p>
+                      <p className="text-sm text-gray-600">{vehicle.driverName || vehicle.driver}</p>
                     </div>
                     <span className={`px-2 py-1 rounded-full text-xs font-medium ${statusColors[vehicle.status]}`}>
                       {vehicle.status}

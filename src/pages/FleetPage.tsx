@@ -10,8 +10,9 @@ export default function FleetPage() {
   const [activeTab, setActiveTab] = useState("vehicles");
 
   return (
-    <PageLayout title="Fleet Management">
+    <PageLayout>
       <div className="space-y-4">
+        <h1 className="text-2xl font-bold">Fleet Management</h1>
         <div className="border-b border-gray-200">
           <Tabs defaultValue="vehicles" onValueChange={setActiveTab} className="w-full">
             <TabsList className="w-full justify-start h-12 bg-transparent p-0">
