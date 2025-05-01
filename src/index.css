@@ -121,4 +121,29 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+  
+  /* Data Table Styles */
+  .data-table {
+    @apply w-full text-sm text-left text-gray-700;
+  }
+  
+  .data-table thead {
+    @apply text-xs text-gray-600 uppercase bg-gray-50;
+  }
+  
+  .data-table th {
+    @apply px-4 py-3 font-semibold;
+  }
+  
+  .data-table tbody tr:nth-child(even) {
+    @apply bg-gray-50;
+  }
+  
+  .data-table td {
+    @apply px-4 py-3;
+  }
+  
+  .data-table tbody tr:hover {
+    @apply bg-gray-50;
+  }
 }

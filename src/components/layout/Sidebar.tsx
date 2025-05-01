@@ -38,8 +38,13 @@ export default function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
   const location = useLocation();
   const currentPath = location.pathname;
-  const currentPathBase = '/' + currentPath.split('/')[1]; // Get base path for active state
-
+  
+  // Check if we're on a sub-path and extract the base path
+  const isActive = (path: string) => {
+    if (path === '/') return currentPath === '/';
+    return currentPath.startsWith(path);
+  };
+  
   return (
     <div className={cn(
       "h-screen bg-white border-r border-gray-200 transition-all duration-300 flex flex-col",
@@ -68,10 +73,10 @@ export default function Sidebar() {
               to={item.path}
               className={cn(
                 "sidebar-item",
-                currentPathBase === item.path && "active"
+                isActive(item.path) && "active"
               )}
             >
-              <item.icon className={currentPathBase === item.path ? "text-logistic-accent" : ""} />
+              <item.icon className={isActive(item.path) ? "text-logistic-accent" : ""} />
               {!collapsed && (
                 <span className="flex-1">{item.name}</span>
               )}

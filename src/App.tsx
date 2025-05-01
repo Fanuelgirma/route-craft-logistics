@@ -16,6 +16,9 @@ import AlertsPage from "./pages/AlertsPage";
 import LiveMapPage from "./pages/LiveMapPage";
 import TripsPage from "./pages/TripsPage";
 import TripDetailPage from "./pages/TripDetailPage";
+import FleetPage from "./pages/FleetPage";
+import VehicleDetailPage from "./pages/fleet/VehicleDetailPage";
+import DriverDetailPage from "./pages/fleet/DriverDetailPage";
 
 const queryClient = new QueryClient();
 
@@ -39,12 +42,16 @@ const App = () => (
           <Route path="/alerts" element={<AlertsPage />} />
           <Route path="/livemap" element={<LiveMapPage />} />
           
+          {/* Fleet section */}
+          <Route path="/fleet" element={<FleetPage />} />
+          <Route path="/fleet/vehicles/:vehicleId" element={<VehicleDetailPage />} />
+          <Route path="/fleet/drivers/:driverId" element={<DriverDetailPage />} />
+          
           {/* Placeholder routes for sidebar navigation */}
           <Route path="/dashboard" element={<Navigate to="/trips" />} />
           <Route path="/returnables" element={<Navigate to="/trips" />} />
           <Route path="/orders" element={<Navigate to="/trips" />} />
           <Route path="/routing" element={<Navigate to="/trips" />} />
-          <Route path="/fleet" element={<Navigate to="/trips" />} />
           <Route path="/sales" element={<Navigate to="/trips" />} />
           <Route path="/settings" element={<Navigate to="/trips" />} />
           
