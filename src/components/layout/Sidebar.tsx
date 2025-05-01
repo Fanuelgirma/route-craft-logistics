@@ -14,7 +14,8 @@ import {
   Settings, 
   ChevronRight, 
   ChevronLeft,
-  DollarSign
+  DollarSign,
+  ShoppingBag
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Link, useLocation } from 'react-router-dom';
@@ -23,7 +24,7 @@ const navItems = [
   { name: 'Dashboard', icon: LayoutDashboard, path: '/dashboard' },
   { name: 'Trips', icon: Truck, path: '/trips' },
   { name: 'Returnables', icon: Package, path: '/returnables' },
-  { name: 'Orders', icon: Box, path: '/orders' },
+  { name: 'Orders', icon: ShoppingBag, path: '/orders' },
   { name: 'Routing', icon: Route, path: '/routing' },
   { name: 'Fleet', icon: Car, path: '/fleet' },
   { name: 'Customers', icon: Users, path: '/customers' },

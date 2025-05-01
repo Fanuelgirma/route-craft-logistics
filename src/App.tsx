@@ -19,6 +19,7 @@ import TripDetailPage from "./pages/TripDetailPage";
 import FleetPage from "./pages/FleetPage";
 import VehicleDetailPage from "./pages/fleet/VehicleDetailPage";
 import DriverDetailPage from "./pages/fleet/DriverDetailPage";
+import OrdersPage from "./pages/OrdersPage";
 
 const queryClient = new QueryClient();
 
@@ -41,6 +42,8 @@ const App = () => (
           <Route path="/kpis" element={<KPIsPage />} />
           <Route path="/alerts" element={<AlertsPage />} />
           <Route path="/livemap" element={<LiveMapPage />} />
+          <Route path="/orders" element={<OrdersPage />} />
+          <Route path="/orders/products" element={<OrdersPage />} />
           
           {/* Fleet section */}
           <Route path="/fleet" element={<FleetPage />} />
@@ -50,7 +53,6 @@ const App = () => (
           {/* Placeholder routes for sidebar navigation */}
           <Route path="/dashboard" element={<Navigate to="/trips" />} />
           <Route path="/returnables" element={<Navigate to="/trips" />} />
-          <Route path="/orders" element={<Navigate to="/trips" />} />
           <Route path="/routing" element={<Navigate to="/trips" />} />
           <Route path="/sales" element={<Navigate to="/trips" />} />
           <Route path="/settings" element={<Navigate to="/trips" />} />
