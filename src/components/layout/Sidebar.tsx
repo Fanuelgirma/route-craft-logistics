@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { 
   LayoutDashboard, 
@@ -14,7 +15,9 @@ import {
   ChevronRight, 
   ChevronLeft,
   DollarSign,
-  ShoppingBag
+  ShoppingBag,
+  Droplet,
+  ChevronDown
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Link, useLocation } from 'react-router-dom';
@@ -26,6 +29,15 @@ const navItems = [
   { name: 'Orders', icon: ShoppingBag, path: '/orders' },
   { name: 'Routing', icon: Route, path: '/routing' },
   { name: 'Fleet', icon: Car, path: '/fleet' },
+  {
+    name: 'Fuel & Energy',
+    icon: Droplet,
+    path: '/fuel',
+    hasSubmenu: true,
+    submenu: [
+      { name: 'Fuel History', path: '/fuel/history' }
+    ]
+  },
   { name: 'Customers', icon: Users, path: '/customers' },
   { name: 'Alerts', icon: Bell, path: '/alerts' },
   { name: 'KPIs', icon: BarChart, path: '/kpis' },
@@ -36,6 +48,7 @@ const navItems = [
 
 export default function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
+  const [expandedMenu, setExpandedMenu] = useState<string | null>(null);
   const location = useLocation();
   const currentPath = location.pathname;
   
@@ -44,9 +57,12 @@ export default function Sidebar() {
     if (path === '/') return currentPath === '/';
     return currentPath.startsWith(path);
   };
+
+  const toggleSubmenu = (name: string) => {
+    setExpandedMenu(expandedMenu === name ? null : name);
+  };
   
   return (
-    
     <div className={cn(
       "h-screen bg-white border-r border-gray-200 transition-all duration-300 flex flex-col",
       collapsed ? "w-16" : "w-56"
@@ -69,22 +85,67 @@ export default function Sidebar() {
       <div className="flex-1 overflow-y-auto py-2 px-2">
         <nav className="space-y-1">
           {navItems.map((item) => (
-            <Link
-              key={item.name}
-              to={item.path}
-              className={cn(
-                "sidebar-item",
-                isActive(item.path) && "active"
+            <div key={item.name}>
+              {item.hasSubmenu ? (
+                <>
+                  <button
+                    onClick={() => toggleSubmenu(item.name)}
+                    className={cn(
+                      "sidebar-item w-full flex items-center",
+                      isActive(item.path) && "active"
+                    )}
+                  >
+                    <item.icon className={isActive(item.path) ? "text-logistic-accent" : ""} />
+                    {!collapsed && (
+                      <>
+                        <span className="flex-1">{item.name}</span>
+                        <ChevronDown 
+                          size={16} 
+                          className={cn(
+                            "text-gray-400 transition-transform", 
+                            expandedMenu === item.name && "transform rotate-180"
+                          )} 
+                        />
+                      </>
+                    )}
+                  </button>
+                  {!collapsed && expandedMenu === item.name && item.submenu && (
+                    <div className="ml-10 mt-1 space-y-1">
+                      {item.submenu.map((subItem) => (
+                        <Link
+                          key={subItem.name}
+                          to={subItem.path}
+                          className={cn(
+                            "block py-1 px-2 text-sm rounded-md",
+                            isActive(subItem.path) 
+                              ? "text-logistic-accent font-medium" 
+                              : "text-gray-600 hover:text-logistic-accent"
+                          )}
+                        >
+                          {subItem.name}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </>
+              ) : (
+                <Link
+                  to={item.path}
+                  className={cn(
+                    "sidebar-item",
+                    isActive(item.path) && "active"
+                  )}
+                >
+                  <item.icon className={isActive(item.path) ? "text-logistic-accent" : ""} />
+                  {!collapsed && (
+                    <span className="flex-1">{item.name}</span>
+                  )}
+                  {!collapsed && item.hasSubmenu && (
+                    <ChevronRight size={16} className="text-gray-400" />
+                  )}
+                </Link>
               )}
-            >
-              <item.icon className={isActive(item.path) ? "text-logistic-accent" : ""} />
-              {!collapsed && (
-                <span className="flex-1">{item.name}</span>
-              )}
-              {!collapsed && item.hasSubmenu && (
-                <ChevronRight size={16} className="text-gray-400" />
-              )}
-            </Link>
+            </div>
           ))}
         </nav>
       </div>

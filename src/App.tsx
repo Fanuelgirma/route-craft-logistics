@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import Index from "./pages/Index";
+import Dashboard from "./pages/Dashboard";
 import NotFound from "./pages/NotFound";
 import CustomersPage from "./pages/CustomersPage";
 import SubRegionsPage from "./pages/SubRegionsPage";
@@ -22,6 +23,7 @@ import DriverDetailPage from "./pages/fleet/DriverDetailPage";
 import OrdersPage from "./pages/OrdersPage";
 import RoutingPage from "./pages/RoutingPage";
 import RouteBuilderPage from "./pages/RouteBuilderPage";
+import FuelHistoryPage from "./pages/FuelHistoryPage";
 
 const queryClient = new QueryClient();
 
@@ -35,6 +37,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           
           {/* Main sections */}
+          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/trips" element={<TripsPage />} />
           <Route path="/trips/:tripId" element={<TripDetailPage />} />
           <Route path="/customers" element={<CustomersPage />} />
@@ -49,16 +52,19 @@ const App = () => (
           <Route path="/routing" element={<RoutingPage />} />
           <Route path="/routing/builder/:batchId" element={<RouteBuilderPage />} />
           
+          {/* Fuel & Energy section */}
+          <Route path="/fuel/history" element={<FuelHistoryPage />} />
+          
           {/* Fleet section */}
           <Route path="/fleet" element={<FleetPage />} />
           <Route path="/fleet/vehicles/:vehicleId" element={<VehicleDetailPage />} />
           <Route path="/fleet/drivers/:driverId" element={<DriverDetailPage />} />
           
           {/* Placeholder routes for sidebar navigation */}
-          <Route path="/dashboard" element={<Navigate to="/trips" />} />
           <Route path="/returnables" element={<Navigate to="/trips" />} />
           <Route path="/sales" element={<Navigate to="/trips" />} />
           <Route path="/settings" element={<Navigate to="/trips" />} />
+          <Route path="/fuel" element={<Navigate to="/fuel/history" />} />
           
           {/* Catch-all route */}
           <Route path="*" element={<NotFound />} />
