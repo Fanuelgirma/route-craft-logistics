@@ -25,6 +25,7 @@ interface OrdersTableProps {
 export default function OrdersTable({ orders, selectedOrders, onSelectionChange, onSelectAll }: OrdersTableProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const [viewingOrder, setViewingOrder] = useState<Order | null>(null);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   
   const pageSize = 20;
   const isAllSelected = orders.length > 0 && orders.every(order => selectedOrders.has(order.id));
@@ -35,6 +36,7 @@ export default function OrdersTable({ orders, selectedOrders, onSelectionChange,
   
   const handleViewDetail = (order: Order) => {
     setViewingOrder(order);
+    setIsDrawerOpen(true);
   };
   
   const renderStatusBadge = (status: string) => {
@@ -164,7 +166,11 @@ export default function OrdersTable({ orders, selectedOrders, onSelectionChange,
       {viewingOrder && (
         <OrderDetailDrawer
           order={viewingOrder}
-          onClose={() => setViewingOrder(null)}
+          open={isDrawerOpen}
+          onClose={() => {
+            setIsDrawerOpen(false);
+            setViewingOrder(null);
+          }}
         />
       )}
     </>
