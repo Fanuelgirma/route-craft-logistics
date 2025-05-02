@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
 import PageLayout from '@/components/layout/PageLayout';
-import { Search, ChevronLeft, ChevronRight, Filter, MoreHorizontal, Plus } from 'lucide-react';
+import { Search, ChevronLeft, ChevronRight, Filter, MoreHorizontal, Plus, ChevronDown, Car } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import DateRangePicker from '@/components/routing/DateRangePicker';
