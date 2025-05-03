@@ -1,4 +1,3 @@
-
 import { useEffect, useState, useMemo } from 'react';
 import { addDays, startOfDay, subDays, format } from 'date-fns';
 import { useQuery } from '@tanstack/react-query';
@@ -595,7 +594,10 @@ export default function Dashboard() {
               <LineChart data={capacityRollingChartData}>
                 <XAxis dataKey="date" />
                 <YAxis domain={[0, 100]} tickFormatter={(value) => `${value}%`} />
-                <Tooltip formatter={(value) => `${value.toFixed(1)}%`} />
+                <Tooltip formatter={(value) => {
+                  // Fix: Check if value is a number before calling toFixed
+                  return typeof value === 'number' ? `${value.toFixed(1)}%` : `${value}%`;
+                }} />
                 <Line 
                   type="monotone" 
                   dataKey="value" 
