@@ -407,8 +407,9 @@ export default function Dashboard() {
       <div className="flex flex-col gap-4 mb-6">
         <div className="flex items-center justify-between bg-white p-4 rounded-lg shadow-sm">
           <div className="flex items-center gap-3">
-            <div className="font-bold text-xl text-logistic-accent">LETA</div>
-            <div className="text-xl font-semibold ml-4">GD</div>
+            <div className="font-bold text-xl text-logistic-accent bg-slate-950">LETA</div>
+            <div className="text-xl font-semibold ml-4">
+          </div>
           </div>
           
           <div className="flex items-center gap-4">
