@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { RoutingStep, TripPlan } from '@/types/routing';
 import RoutingWizardTabs from './RoutingWizardTabs';
@@ -12,7 +11,7 @@ import { Drawer, DrawerContent } from "@/components/ui/drawer";
 import RouteSettingsModal from './RouteSettingsModal';
 import EditConfigurationModal from './EditConfigurationModal';
 import { useToast } from '@/hooks/use-toast';
-import { useMobile } from '@/hooks/use-mobile';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const initialTripPlan: TripPlan = {
   id: Math.random().toString(36).substring(2, 15),
@@ -45,7 +44,7 @@ export default function RouteWizard() {
   const [showSettingsModal, setShowSettingsModal] = useState(false);
   const [showConfigModal, setShowConfigModal] = useState(false);
   const { toast } = useToast();
-  const isMobile = useMobile();
+  const isMobile = useIsMobile();
   
   // Show settings modal on first load
   useEffect(() => {
