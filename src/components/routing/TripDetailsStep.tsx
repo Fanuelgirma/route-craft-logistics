@@ -1,311 +1,236 @@
-import { useState } from 'react';
-import { format } from 'date-fns';
-import { Calendar as CalendarIcon, MapPin, Clock, ChevronRight } from 'lucide-react';
+
+import React, { useState } from 'react';
+import { TripPlan, RoutingLocation } from '@/types/routing';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
+import { Calendar, Clock, MapPin, Settings, ChevronRight, Plus } from 'lucide-react';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Calendar } from '@/components/ui/calendar';
+import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
-import { RoutingLocation, TripPlan } from '@/types/routing';
-import { cn } from '@/lib/utils';
+import { Input } from '@/components/ui/input';
+import { format } from 'date-fns';
 
 interface TripDetailsStepProps {
   tripPlan: TripPlan;
   onUpdate: (updates: Partial<TripPlan>) => void;
   onNext: () => void;
+  onOpenSettings?: () => void;
 }
 
-export default function TripDetailsStep({ tripPlan, onUpdate, onNext }: TripDetailsStepProps) {
-  // Mock data for locations
-  const locations: RoutingLocation[] = [
-    { 
-      id: '1', 
-      name: 'Nairobi Main Warehouse', 
-      address: '123 Industrial Avenue, Nairobi', 
-      lat: -1.2864, 
-      lng: 36.8172, 
-      type: 'Warehouse' 
-    },
-    { 
-      id: '2', 
-      name: 'Driver Home - John Doe', 
-      address: '55 Miller St, Pyrmont NSW 2009, Australia', 
-      lat: -33.8688, 
-      lng: 151.2093, 
-      type: 'Driver Home' 
-    },
-  ];
+export default function TripDetailsStep({ tripPlan, onUpdate, onNext, onOpenSettings }: TripDetailsStepProps) {
+  const [locationName, setLocationName] = useState('');
+  const [locationAddress, setLocationAddress] = useState('');
   
-  const [startAddress, setStartAddress] = useState(tripPlan.startLocation?.address || '');
-  const [endAddress, setEndAddress] = useState(tripPlan.endLocation?.address || '');
-  
-  const handleStartLocationSelect = (locationType: string) => {
-    if (locationType === 'manual') {
-      // Keep the current address
-    } else if (locationType === 'warehouse') {
-      const warehouse = locations.find(l => l.type === 'Warehouse');
-      if (warehouse) {
-        setStartAddress(warehouse.address);
-        onUpdate({ startLocation: warehouse });
-      }
-    } else if (locationType === 'driver-home') {
-      const driverHome = locations.find(l => l.type === 'Driver Home');
-      if (driverHome) {
-        setStartAddress(driverHome.address);
-        onUpdate({ startLocation: driverHome });
-      }
-    }
+  const handleDateChange = (dateStr: string) => {
+    const newDate = new Date(dateStr);
+    onUpdate({ date: newDate });
   };
-
+  
+  const handleStartTimeChange = (time: string) => {
+    onUpdate({ startTime: time });
+  };
+  
+  const handleEndTimeChange = (time: string) => {
+    onUpdate({ endTime: time });
+  };
+  
   const handleEndLocationTypeChange = (type: TripPlan['endLocationType']) => {
     onUpdate({ endLocationType: type });
-    
-    if (type === 'Return To Start' && tripPlan.startLocation) {
-      onUpdate({ endLocation: tripPlan.startLocation });
-      setEndAddress(tripPlan.startLocation.address);
-    } else if (type === 'Warehouse') {
-      const warehouse = locations.find(l => l.type === 'Warehouse');
-      if (warehouse) {
-        onUpdate({ endLocation: warehouse });
-        setEndAddress(warehouse.address);
-      }
-    } else if (type === 'No End Location') {
-      onUpdate({ endLocation: null });
-      setEndAddress('');
-    }
+  };
+  
+  const handleToggleSkillMatching = (checked: boolean) => {
+    onUpdate({ skillMatching: checked });
+  };
+  
+  const handleToggleUseTeamMemberProfile = (checked: boolean) => {
+    onUpdate({ useTeamMemberProfile: checked });
+  };
+  
+  const handleToggleIgnoreTimeWindows = (checked: boolean) => {
+    onUpdate({ ignoreTimeWindows: checked });
   };
 
   return (
-    <div className="p-4 bg-white shadow-sm rounded-md">
-      <h2 className="text-2xl font-medium mb-6">Trip Details</h2>
+    <div className="p-6 max-w-3xl mx-auto">
+      <h2 className="text-2xl font-bold mb-6">Trip Details</h2>
       
-      <div className="space-y-6">
-        {/* Fleet section */}
-        <div>
-          <Label className="text-sm text-gray-500">Fleet</Label>
-          <div className="mt-1">
-            <div className="relative">
-              <select 
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                defaultValue="all"
-              >
-                <option value="all">All</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        {/* Start Location section */}
-        <div>
-          <Label className="text-sm text-gray-500">Start Location</Label>
-          <div className="mt-2 space-y-3">
-            <RadioGroup 
-              defaultValue="manual" 
-              className="flex space-x-4"
-              onValueChange={handleStartLocationSelect}
-            >
-              <div className="flex items-center space-x-1">
-                <RadioGroupItem value="manual" id="manual" />
-                <Label htmlFor="manual" className="text-sm cursor-pointer">Enter a start location</Label>
-              </div>
-              <div className="flex items-center space-x-1">
-                <RadioGroupItem value="driver-home" id="driver-home" />
-                <Label htmlFor="driver-home" className="text-sm cursor-pointer">Team members start from their home location</Label>
-              </div>
-              <div className="flex items-center space-x-1">
-                <RadioGroupItem value="warehouse" id="warehouse" />
-                <Label htmlFor="warehouse" className="text-sm cursor-pointer">Warehouse</Label>
-              </div>
-            </RadioGroup>
-
-            <div className="w-full">
-              <Label className="text-xs text-gray-500">Address</Label>
-              <div className="relative mt-1">
-                <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-500" />
-                <Input 
-                  value={startAddress} 
-                  onChange={(e) => setStartAddress(e.target.value)}
-                  className="pl-10" 
-                  placeholder="Enter start address"
-                />
-              </div>
-              <div className="flex items-center mt-1 justify-between">
-                <Label className="text-xs text-gray-500">Run #</Label>
-                <Input className="w-24 h-8 ml-2 text-sm" />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* End Location section */}
-        <div>
-          <div className="flex justify-between items-center">
-            <Label className="text-sm text-gray-500">End Location</Label>
-            <Button 
-              variant="link" 
-              className="text-blue-500 p-0 h-auto text-sm"
-              onClick={() => handleEndLocationTypeChange('Custom')}
-            >
-              Change
-            </Button>
-          </div>
-          
-          <div className="mt-2 p-4 border border-gray-200 rounded-md bg-gray-50">
-            <RadioGroup 
-              value={tripPlan.endLocationType}
-              onValueChange={(value) => handleEndLocationTypeChange(value as TripPlan['endLocationType'])}
-              className="grid grid-cols-2 gap-4"
-            >
-              <div className="flex items-center space-x-3">
-                <RadioGroupItem value="No End Location" id="no-end" />
-                <Label htmlFor="no-end" className="cursor-pointer">No end location</Label>
-              </div>
-              <div className="flex items-center space-x-3">
-                <RadioGroupItem value="Return To Start" id="return" />
-                <Label htmlFor="return" className="cursor-pointer">Return to start location</Label>
-              </div>
-              <div className="flex items-center space-x-3">
-                <RadioGroupItem value="Driver Default" id="driver-default" />
-                <Label htmlFor="driver-default" className="cursor-pointer">Team member's default end location</Label>
-              </div>
-              <div className="flex items-center space-x-3">
-                <RadioGroupItem value="Custom" id="custom-end" />
-                <Label htmlFor="custom-end" className="cursor-pointer">Enter an end location</Label>
-              </div>
-              <div className="flex items-center space-x-3">
-                <RadioGroupItem value="Warehouse" id="warehouse-end" />
-                <Label htmlFor="warehouse-end" className="cursor-pointer">Warehouse</Label>
-              </div>
-            </RadioGroup>
-          </div>
-        </div>
-
-        {/* Date and Time section */}
-        <div className="grid grid-cols-3 gap-4">
-          <div>
-            <Label className="text-sm text-gray-500">Date</Label>
-            <div className="mt-1">
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className={cn(
-                      "w-full justify-start text-left",
-                      !tripPlan.date && "text-muted-foreground"
-                    )}
-                  >
-                    <CalendarIcon className="mr-2 h-4 w-4" />
-                    {tripPlan.date ? format(tripPlan.date, "yyyy-MM-dd") : <span>Pick a date</span>}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0 pointer-events-auto">
-                  <Calendar
-                    mode="single"
-                    selected={tripPlan.date}
-                    onSelect={(date) => date && onUpdate({ date })}
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
-            </div>
-          </div>
-
-          <div>
-            <Label className="text-sm text-gray-500">Start Time</Label>
-            <div className="mt-1 relative">
-              <Clock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-500" />
-              <select
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                value={tripPlan.startTime}
-                onChange={(e) => onUpdate({ startTime: e.target.value })}
-              >
-                {Array.from({ length: 24 }).map((_, hour) => {
-                  const timeStr = `${hour.toString().padStart(2, '0')}:00`;
-                  return (
-                    <option key={timeStr} value={timeStr}>{timeStr}</option>
-                  );
-                })}
-              </select>
-            </div>
-          </div>
-
-          <div>
-            <Label className="text-sm text-gray-500">End Time</Label>
-            <div className="mt-1 relative">
-              <Clock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-500" />
-              <select
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                value={tripPlan.endTime}
-                onChange={(e) => onUpdate({ endTime: e.target.value })}
-              >
-                {Array.from({ length: 24 }).map((_, hour) => {
-                  const timeStr = `${hour.toString().padStart(2, '0')}:00`;
-                  return (
-                    <option key={timeStr} value={timeStr}>{timeStr}</option>
-                  );
-                })}
-              </select>
-            </div>
-          </div>
-        </div>
-
-        {/* Checkboxes section */}
-        <div className="space-y-2">
-          <div className="flex items-center space-x-2">
-            <Checkbox 
-              id="skill-matching" 
-              checked={tripPlan.skillMatching}
-              onCheckedChange={(checked) => onUpdate({ skillMatching: !!checked })}
-            />
-            <Label htmlFor="skill-matching" className="cursor-pointer">Skill matching ON</Label>
-          </div>
-          
-          <div className="flex items-center space-x-2">
-            <Checkbox 
-              id="team-member-profile" 
-              checked={tripPlan.useTeamMemberProfile}
-              onCheckedChange={(checked) => onUpdate({ useTeamMemberProfile: !!checked })}
-            />
-            <Label htmlFor="team-member-profile" className="text-sm cursor-pointer">
-              Use the start/end times on the team member profiles (where configured), overriding the times above
-            </Label>
-          </div>
-          
-          <div className="flex items-center space-x-2">
-            <Checkbox 
-              id="add-return" 
-              checked={tripPlan.addReturnToStart}
-              onCheckedChange={(checked) => onUpdate({ addReturnToStart: !!checked })}
-            />
-            <Label htmlFor="add-return" className="cursor-pointer">Add return to start location for existing trips</Label>
-          </div>
-          
-          <div className="flex items-center space-x-2">
-            <Checkbox 
-              id="ignore-windows" 
-              checked={tripPlan.ignoreTimeWindows}
-              onCheckedChange={(checked) => onUpdate({ ignoreTimeWindows: !!checked })}
-            />
-            <Label htmlFor="ignore-windows" className="cursor-pointer">Ignore Time Windows</Label>
-          </div>
-        </div>
-
-        {/* Next button */}
-        <div className="flex justify-end mt-4">
-          <Button 
-            onClick={onNext} 
-            className="flex items-center"
-          >
-            Next
-            <ChevronRight className="ml-1 w-4 h-4" />
+      <div className="mb-8">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-medium">Basic Information</h3>
+          <Button variant="outline" size="sm" onClick={onOpenSettings} className="flex items-center gap-1">
+            <Settings className="h-4 w-4" />
+            <span>Route Settings</span>
           </Button>
         </div>
+        
+        <Card>
+          <CardContent className="pt-6 pb-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <Label htmlFor="tripName">Trip Name</Label>
+                <Input 
+                  id="tripName" 
+                  value={tripPlan.name}
+                  onChange={(e) => onUpdate({ name: e.target.value })}
+                  className="border-gray-300"
+                  placeholder="Enter trip name"
+                />
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="tripDate">Trip Date</Label>
+                <div className="relative">
+                  <Input
+                    id="tripDate"
+                    type="date"
+                    value={format(tripPlan.date, 'yyyy-MM-dd')}
+                    onChange={(e) => handleDateChange(e.target.value)}
+                    className="pl-10 border-gray-300"
+                  />
+                  <Calendar className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
+                </div>
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="startTime">Start Time</Label>
+                <div className="relative">
+                  <Input
+                    id="startTime"
+                    type="time"
+                    value={tripPlan.startTime}
+                    onChange={(e) => handleStartTimeChange(e.target.value)}
+                    className="pl-10 border-gray-300"
+                  />
+                  <Clock className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
+                </div>
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="endTime">End Time</Label>
+                <div className="relative">
+                  <Input
+                    id="endTime"
+                    type="time"
+                    value={tripPlan.endTime}
+                    onChange={(e) => handleEndTimeChange(e.target.value)}
+                    className="pl-10 border-gray-300"
+                  />
+                  <Clock className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+      
+      <div className="mb-8">
+        <h3 className="text-lg font-medium mb-4">Starting Location</h3>
+        
+        <Card className="bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-100 overflow-hidden">
+          <CardHeader className="pb-2 relative">
+            <div className="absolute top-4 right-4 h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center">
+              <MapPin className="h-4 w-4 text-blue-600" />
+            </div>
+            <CardTitle className="text-lg font-medium text-blue-800">{tripPlan.startLocation.name}</CardTitle>
+            <CardDescription>{tripPlan.startLocation.address}</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="mt-2 flex gap-4">
+              <Button variant="outline" size="sm" className="text-xs border-blue-200 text-blue-700 hover:bg-blue-50">
+                Change Location
+              </Button>
+              <Button variant="outline" size="sm" className="text-xs border-blue-200 text-blue-700 hover:bg-blue-50">
+                <Plus className="h-3 w-3 mr-1" /> Add New Location
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+      
+      <div className="mb-8">
+        <h3 className="text-lg font-medium mb-4">Ending Location</h3>
+        
+        <Card>
+          <CardContent className="pt-6">
+            <RadioGroup
+              defaultValue={tripPlan.endLocationType}
+              onValueChange={(value) => handleEndLocationTypeChange(value as TripPlan['endLocationType'])}
+              className="space-y-3"
+            >
+              <div className="flex items-center space-x-2 p-2 rounded-md hover:bg-gray-50 transition-colors">
+                <RadioGroupItem value="No End Location" id="no-end" />
+                <Label htmlFor="no-end" className="flex-1 cursor-pointer">No End Location</Label>
+              </div>
+              
+              <div className="flex items-center space-x-2 p-2 rounded-md hover:bg-gray-50 transition-colors">
+                <RadioGroupItem value="Return To Start" id="return" />
+                <Label htmlFor="return" className="flex-1 cursor-pointer">Return To Start Location</Label>
+              </div>
+              
+              <div className="flex items-center space-x-2 p-2 rounded-md hover:bg-gray-50 transition-colors">
+                <RadioGroupItem value="Driver Default" id="driver-default" />
+                <Label htmlFor="driver-default" className="flex-1 cursor-pointer">Driver Default Location</Label>
+              </div>
+              
+              <div className="flex items-center space-x-2 p-2 rounded-md hover:bg-gray-50 transition-colors">
+                <RadioGroupItem value="Custom" id="custom" />
+                <Label htmlFor="custom" className="flex-1 cursor-pointer">Custom Location</Label>
+              </div>
+            </RadioGroup>
+          </CardContent>
+        </Card>
+      </div>
+      
+      <div className="mb-8">
+        <h3 className="text-lg font-medium mb-4">Additional Options</h3>
+        
+        <Card>
+          <CardContent className="pt-6">
+            <div className="space-y-4">
+              <div className="flex items-center space-x-3 p-2 rounded-md hover:bg-gray-50 transition-colors">
+                <Checkbox 
+                  id="skillMatching" 
+                  checked={tripPlan.skillMatching} 
+                  onCheckedChange={handleToggleSkillMatching}
+                />
+                <div>
+                  <Label htmlFor="skillMatching" className="text-sm font-medium cursor-pointer">Skill Matching</Label>
+                  <p className="text-xs text-gray-500">Match drivers with required skills to stops</p>
+                </div>
+              </div>
+              
+              <div className="flex items-center space-x-3 p-2 rounded-md hover:bg-gray-50 transition-colors">
+                <Checkbox 
+                  id="useTeamMember" 
+                  checked={tripPlan.useTeamMemberProfile} 
+                  onCheckedChange={handleToggleUseTeamMemberProfile}
+                />
+                <div>
+                  <Label htmlFor="useTeamMember" className="text-sm font-medium cursor-pointer">Use Team Member Profile</Label>
+                  <p className="text-xs text-gray-500">Apply team member preferences when planning routes</p>
+                </div>
+              </div>
+              
+              <div className="flex items-center space-x-3 p-2 rounded-md hover:bg-gray-50 transition-colors">
+                <Checkbox 
+                  id="ignoreTimeWindows" 
+                  checked={tripPlan.ignoreTimeWindows} 
+                  onCheckedChange={handleToggleIgnoreTimeWindows}
+                />
+                <div>
+                  <Label htmlFor="ignoreTimeWindows" className="text-sm font-medium cursor-pointer">Ignore Time Windows</Label>
+                  <p className="text-xs text-gray-500">Ignore customer time windows when planning routes</p>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+      
+      <div className="flex justify-end mt-10">
+        <Button onClick={onNext} className="bg-blue-600 hover:bg-blue-700">
+          Next Step <ChevronRight className="ml-1 h-4 w-4" />
+        </Button>
       </div>
     </div>
   );

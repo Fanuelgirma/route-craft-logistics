@@ -7,6 +7,12 @@ import SelectStopsStep from './SelectStopsStep';
 import SelectTeamMembersStep from './SelectTeamMembersStep';
 import TripSummaryStep from './TripSummaryStep';
 import RoutingMapView from './RoutingMapView';
+import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Drawer, DrawerContent } from "@/components/ui/drawer";
+import RouteSettingsModal from './RouteSettingsModal';
+import EditConfigurationModal from './EditConfigurationModal';
+import { useToast } from '@/hooks/use-toast';
+import { useMobile } from '@/hooks/use-mobile';
 
 const initialTripPlan: TripPlan = {
   id: Math.random().toString(36).substring(2, 15),
@@ -36,17 +42,58 @@ const initialTripPlan: TripPlan = {
 export default function RouteWizard() {
   const [activeStep, setActiveStep] = useState<RoutingStep>('Trip Details');
   const [tripPlan, setTripPlan] = useState<TripPlan>(initialTripPlan);
+  const [showSettingsModal, setShowSettingsModal] = useState(false);
+  const [showConfigModal, setShowConfigModal] = useState(false);
+  const { toast } = useToast();
+  const isMobile = useMobile();
+  
+  // Show settings modal on first load
+  useEffect(() => {
+    // Check if we should show the route settings modal
+    const hideRouteSettings = localStorage.getItem('hideRouteSettings');
+    if (!hideRouteSettings) {
+      setTimeout(() => {
+        setShowSettingsModal(true);
+      }, 500);
+    }
+  }, []);
   
   // Update tripPlan state
   const handleTripPlanUpdate = (updates: Partial<TripPlan>) => {
     setTripPlan(prev => ({ ...prev, ...updates }));
+    toast({
+      title: "Progress saved",
+      description: "Your changes have been saved",
+      duration: 2000,
+    });
   };
   
   // Navigation between steps
   const handleNext = () => {
-    if (activeStep === 'Trip Details') setActiveStep('Select Stops');
-    else if (activeStep === 'Select Stops') setActiveStep('Select Team Members');
-    else if (activeStep === 'Select Team Members') setActiveStep('Trip Summary');
+    if (activeStep === 'Trip Details') {
+      setActiveStep('Select Stops');
+      toast({
+        title: "Step completed",
+        description: "Now select your stops",
+        duration: 2000,
+      });
+    }
+    else if (activeStep === 'Select Stops') {
+      setActiveStep('Select Team Members');
+      toast({
+        title: "Stops selected",
+        description: "Now select team members",
+        duration: 2000,
+      });
+    }
+    else if (activeStep === 'Select Team Members') {
+      setActiveStep('Trip Summary');
+      toast({
+        title: "Team selected",
+        description: "Review your trip summary",
+        duration: 2000,
+      });
+    }
   };
   
   const handlePrevious = () => {
@@ -70,16 +117,27 @@ export default function RouteWizard() {
     // In a real app, you would likely make an API call here to save the trip plan
     // and then navigate to a confirmation page or back to a list of trips
     
-    // For now, reset the wizard
+    toast({
+      title: "Trip plan completed!",
+      description: "Your route has been created successfully",
+      variant: "default",
+    });
+    
+    // Reset the wizard
     setActiveStep('Trip Details');
     setTripPlan(initialTripPlan);
+  };
+  
+  const handleOpenConfig = () => {
+    setShowSettingsModal(false);
+    setShowConfigModal(true);
   };
   
   // Render the appropriate step
   const renderStep = () => {
     switch (activeStep) {
       case 'Trip Details':
-        return <TripDetailsStep tripPlan={tripPlan} onUpdate={handleTripPlanUpdate} onNext={handleNext} />;
+        return <TripDetailsStep tripPlan={tripPlan} onUpdate={handleTripPlanUpdate} onNext={handleNext} onOpenSettings={() => setShowConfigModal(true)} />;
       case 'Select Stops':
         return <SelectStopsStep tripPlan={tripPlan} onUpdate={handleTripPlanUpdate} onNext={handleNext} onPrevious={handlePrevious} />;
       case 'Select Team Members':
@@ -87,27 +145,43 @@ export default function RouteWizard() {
       case 'Trip Summary':
         return <TripSummaryStep tripPlan={tripPlan} onUpdate={handleTripPlanUpdate} onPrevious={handlePrevious} onComplete={handleComplete} />;
       default:
-        return <TripDetailsStep tripPlan={tripPlan} onUpdate={handleTripPlanUpdate} onNext={handleNext} />;
+        return <TripDetailsStep tripPlan={tripPlan} onUpdate={handleTripPlanUpdate} onNext={handleNext} onOpenSettings={() => setShowConfigModal(true)} />;
     }
   };
+
+  const ModalComponent = isMobile ? Drawer : Dialog;
+  const ModalContentComponent = isMobile ? DrawerContent : DialogContent;
 
   return (
     <div className="flex h-screen bg-gray-50">
       <div className="w-1/2 overflow-auto border-r border-gray-200 flex flex-col">
-        <div className="flex-shrink-0">
+        <div className="flex-shrink-0 shadow-sm">
           <RoutingWizardTabs
             activeStep={activeStep}
             onStepChange={setActiveStep}
             isStepAccessible={isStepAccessible}
           />
         </div>
-        <div className="flex-1 overflow-auto">
+        <div className="flex-1 overflow-auto bg-white">
           {renderStep()}
         </div>
       </div>
-      <div className="w-1/2 relative">
+      <div className="w-1/2 relative bg-gray-100">
         <RoutingMapView tripPlan={tripPlan} activeStep={activeStep} />
       </div>
+      
+      {/* Settings Modal */}
+      <RouteSettingsModal 
+        isOpen={showSettingsModal} 
+        onClose={() => setShowSettingsModal(false)} 
+        onEdit={handleOpenConfig} 
+      />
+      
+      {/* Edit Configuration Modal */}
+      <EditConfigurationModal 
+        isOpen={showConfigModal} 
+        onClose={() => setShowConfigModal(false)} 
+      />
     </div>
   );
 }
