@@ -24,6 +24,7 @@ import OrdersPage from "./pages/OrdersPage";
 import RoutingPage from "./pages/RoutingPage";
 import RouteBuilderPage from "./pages/RouteBuilderPage";
 import FuelHistoryPage from "./pages/FuelHistoryPage";
+import ReturnablesPage from "./pages/ReturnablesPage";
 
 const queryClient = new QueryClient();
 
@@ -40,6 +41,7 @@ const App = () => (
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/trips" element={<TripsPage />} />
           <Route path="/trips/:tripId" element={<TripDetailPage />} />
+          <Route path="/returnables" element={<ReturnablesPage />} />
           <Route path="/customers" element={<CustomersPage />} />
           <Route path="/customers/sub-regions" element={<SubRegionsPage />} />
           <Route path="/customers/map" element={<MapPage />} />
@@ -61,7 +63,6 @@ const App = () => (
           <Route path="/fleet/drivers/:driverId" element={<DriverDetailPage />} />
           
           {/* Placeholder routes for sidebar navigation */}
-          <Route path="/returnables" element={<Navigate to="/trips" />} />
           <Route path="/sales" element={<Navigate to="/trips" />} />
           <Route path="/settings" element={<Navigate to="/trips" />} />
           <Route path="/fuel" element={<Navigate to="/fuel/history" />} />
