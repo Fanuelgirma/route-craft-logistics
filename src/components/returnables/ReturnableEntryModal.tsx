@@ -1,21 +1,22 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { ReturnableType, ReturnableStatus } from '@/types/returnable';
+import { ReturnableType, ReturnableStatus, ReturnableEntry } from '@/types/returnable';
 import { useToast } from '@/hooks/use-toast';
 
 interface ReturnableEntryModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSave: (data: any) => void;
+  returnable?: ReturnableEntry; // Add the returnable prop as optional
 }
 
-export default function ReturnableEntryModal({ isOpen, onClose, onSave }: ReturnableEntryModalProps) {
+export default function ReturnableEntryModal({ isOpen, onClose, onSave, returnable }: ReturnableEntryModalProps) {
   const { toast } = useToast();
   const [formData, setFormData] = useState({
     tripId: '',
@@ -27,6 +28,22 @@ export default function ReturnableEntryModal({ isOpen, onClose, onSave }: Return
     status: 'Pending Return' as ReturnableStatus,
     notes: ''
   });
+
+  // If a returnable is provided, populate the form with its data
+  useEffect(() => {
+    if (returnable) {
+      setFormData({
+        tripId: returnable.tripId || '',
+        driver: returnable.driver || '',
+        customer: returnable.customer || '',
+        itemType: returnable.itemType || 'Crate',
+        quantityOut: returnable.quantityOut || 0,
+        quantityReturned: returnable.quantityReturned || 0,
+        status: returnable.status || 'Pending Return',
+        notes: returnable.notes || ''
+      });
+    }
+  }, [returnable]);
 
   const handleChange = (field: string, value: any) => {
     setFormData({
@@ -47,15 +64,17 @@ export default function ReturnableEntryModal({ isOpen, onClose, onSave }: Return
     
     onSave({
       ...formData,
-      id: Math.random().toString(36).substring(2, 11),
-      date: new Date(),
-      createdAt: new Date(),
+      id: returnable?.id || Math.random().toString(36).substring(2, 11),
+      date: returnable?.date || new Date(),
+      createdAt: returnable?.createdAt || new Date(),
       updatedAt: new Date(),
     });
     
     toast({
-      title: "Returnable Entry Added",
-      description: "The returnable entry has been successfully created",
+      title: returnable ? "Returnable Entry Updated" : "Returnable Entry Added",
+      description: returnable 
+        ? "The returnable entry has been successfully updated" 
+        : "The returnable entry has been successfully created",
       variant: "default"
     });
     
@@ -66,7 +85,7 @@ export default function ReturnableEntryModal({ isOpen, onClose, onSave }: Return
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Add Returnable Entry</DialogTitle>
+          <DialogTitle>{returnable ? 'Edit' : 'Add'} Returnable Entry</DialogTitle>
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-2 gap-4">
@@ -181,7 +200,7 @@ export default function ReturnableEntryModal({ isOpen, onClose, onSave }: Return
         </div>
         <DialogFooter>
           <Button variant="outline" onClick={onClose}>Cancel</Button>
-          <Button onClick={handleSubmit}>Save Entry</Button>
+          <Button onClick={handleSubmit}>{returnable ? 'Update' : 'Save'} Entry</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

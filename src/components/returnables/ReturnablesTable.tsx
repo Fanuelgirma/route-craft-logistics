@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -117,9 +116,10 @@ const mockReturnables: ReturnableEntry[] = [
 export default function ReturnablesTable({ status, showOverdueOnly = false }: ReturnablesTableProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingReturnable, setEditingReturnable] = useState<ReturnableEntry | null>(null);
+  const [returnables, setReturnables] = useState<ReturnableEntry[]>(mockReturnables);
   
   // Filter returnables based on props
-  let filteredReturnables = [...mockReturnables];
+  let filteredReturnables = [...returnables];
   
   if (status) {
     const statusArray = Array.isArray(status) ? status : [status];
@@ -159,6 +159,19 @@ export default function ReturnablesTable({ status, showOverdueOnly = false }: Re
   const handleEdit = (returnable: ReturnableEntry) => {
     setEditingReturnable(returnable);
     setIsModalOpen(true);
+  };
+
+  const handleSaveReturnable = (data: any) => {
+    if (editingReturnable) {
+      // Update existing returnable
+      const updatedReturnables = returnables.map(item => 
+        item.id === editingReturnable.id ? { ...item, ...data } : item
+      );
+      setReturnables(updatedReturnables);
+    } else {
+      // Add new returnable
+      setReturnables([...returnables, data]);
+    }
   };
 
   return (
@@ -273,7 +286,8 @@ export default function ReturnablesTable({ status, showOverdueOnly = false }: Re
         <ReturnableEntryModal
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
-          returnable={editingReturnable}
+          onSave={handleSaveReturnable}
+          returnable={editingReturnable || undefined}
         />
       )}
     </div>
