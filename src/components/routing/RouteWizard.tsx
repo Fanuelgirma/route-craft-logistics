@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { RoutingStep, TripPlan } from '@/types/routing';
 import RoutingWizardTabs from './RoutingWizardTabs';
@@ -152,7 +153,7 @@ export default function RouteWizard() {
   const ModalContentComponent = isMobile ? DrawerContent : DialogContent;
 
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="flex bg-gray-50 rounded-lg shadow-sm">
       <div className="w-1/2 overflow-auto border-r border-gray-200 flex flex-col">
         <div className="flex-shrink-0 shadow-sm">
           <RoutingWizardTabs
