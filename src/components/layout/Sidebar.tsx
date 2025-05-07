@@ -26,6 +26,7 @@ const navItems = [
   { name: 'Dashboard', icon: LayoutDashboard, path: '/dashboard' },
   { name: 'Trips', icon: Truck, path: '/trips' },
   { name: 'Returnables', icon: Package, path: '/returnables' },
+  { name: 'Sales', icon: DollarSign, path: '/sales' },
   { name: 'Orders', icon: ShoppingBag, path: '/orders' },
   { name: 'Routing', icon: Route, path: '/routing' },
   { name: 'Fleet', icon: Car, path: '/fleet' },
@@ -42,7 +43,6 @@ const navItems = [
   { name: 'Alerts', icon: Bell, path: '/alerts' },
   { name: 'KPIs', icon: BarChart, path: '/kpis' },
   { name: 'Live Map', icon: Map, path: '/livemap' },
-  { name: 'Sales', icon: DollarSign, path: '/sales' },
   { name: 'Settings', icon: Settings, path: '/settings', hasSubmenu: true },
 ];
 
