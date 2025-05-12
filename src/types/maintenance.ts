@@ -20,6 +20,18 @@ export interface ServiceTask {
   name: string;
 }
 
+export interface ServiceTaskExtended extends ServiceTask {
+  description?: string;
+  serviceEntries: number;
+  serviceReminders: number;
+  servicePrograms: number;
+  workOrders: number;
+  defaultReasonForRepair?: string;
+  defaultCategoryCode?: string;
+  defaultSystemCode?: string;
+  defaultAssemblyCode?: string;
+}
+
 export interface ServiceEntry {
   id: string;
   assetId: string;

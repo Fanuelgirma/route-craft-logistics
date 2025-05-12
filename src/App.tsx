@@ -27,6 +27,7 @@ import FuelHistoryPage from "./pages/FuelHistoryPage";
 import ReturnablesPage from "./pages/ReturnablesPage";
 import SalesPage from "./pages/SalesPage";
 import VehicleHistoryPage from "./pages/VehicleHistoryPage";
+import ServiceTasksPage from "./pages/ServiceTasksPage";
 
 const queryClient = new QueryClient();
 
@@ -60,6 +61,7 @@ const App = () => (
           {/* Fuel & Energy section */}
           <Route path="/fuel/history" element={<FuelHistoryPage />} />
           <Route path="/fuel/vehicle-history" element={<VehicleHistoryPage />} />
+          <Route path="/fuel/service-tasks" element={<ServiceTasksPage />} />
           
           {/* Fleet section */}
           <Route path="/fleet" element={<FleetPage />} />

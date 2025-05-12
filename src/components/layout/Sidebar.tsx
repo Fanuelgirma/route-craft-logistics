@@ -19,7 +19,8 @@ import {
   Droplet,
   ChevronDown,
   Fuel,
-  History
+  History,
+  Wrench
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Link, useLocation } from 'react-router-dom';
@@ -39,7 +40,8 @@ const navItems = [
     hasSubmenu: true,
     submenu: [
       { name: 'Fuel History', path: '/fuel/history' },
-      { name: 'Vehicle History', path: '/fuel/vehicle-history' }
+      { name: 'Vehicle History', path: '/fuel/vehicle-history' },
+      { name: 'Service Tasks', path: '/fuel/service-tasks', icon: Wrench }
     ]
   },
   { name: 'Customers', icon: Users, path: '/customers' },
@@ -119,12 +121,13 @@ export default function Sidebar() {
                           key={subItem.name}
                           to={subItem.path}
                           className={cn(
-                            "block py-1 px-2 text-sm rounded-md",
+                            "block py-1 px-2 text-sm rounded-md flex items-center",
                             isActive(subItem.path) 
                               ? "text-logistic-accent font-medium" 
                               : "text-gray-600 hover:text-logistic-accent"
                           )}
                         >
+                          {subItem.icon && <subItem.icon className="mr-2" size={16} />}
                           {subItem.name}
                         </Link>
                       ))}
