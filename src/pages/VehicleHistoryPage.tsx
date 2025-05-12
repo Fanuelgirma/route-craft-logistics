@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { Plus, Save, Download, Settings, Search, ChevronDown } from 'lucide-react';
 import PageLayout from '@/components/layout/PageLayout';
-import { DataTable, Column } from '@/components/ui/DataTable';
+import DataTable, { Column } from '@/components/ui/DataTable';
 import ActionButton from '@/components/ui/ActionButton';
 import { Button } from '@/components/ui/button';
 import { ServiceEntry } from '@/types/maintenance';
