@@ -22,6 +22,16 @@ export interface Vehicle {
     lat: number;
     lng: number;
   };
+  // Properties for vehicle history
+  lastServiceDate?: string;
+  nextServiceDate?: string;
+  mileage?: number;
+  fuelType?: string;
+  licenseExpiry?: string;
+  insuranceExpiry?: string;
+  assignedOperator?: string;
+  group?: string;
+  serviceTasks?: string[];
 }
 
 export type VehicleStatus = 'Available' | 'Scheduled' | 'Dispatched' | 'In Transit' | 'Offline';
