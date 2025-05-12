@@ -17,7 +17,9 @@ import {
   DollarSign,
   ShoppingBag,
   Droplet,
-  ChevronDown
+  ChevronDown,
+  Fuel,
+  History
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Link, useLocation } from 'react-router-dom';
@@ -36,7 +38,8 @@ const navItems = [
     path: '/fuel',
     hasSubmenu: true,
     submenu: [
-      { name: 'Fuel History', path: '/fuel/history' }
+      { name: 'Fuel History', path: '/fuel/history' },
+      { name: 'Vehicle History', path: '/fuel/vehicle-history' }
     ]
   },
   { name: 'Customers', icon: Users, path: '/customers' },
