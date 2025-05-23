@@ -1,8 +1,7 @@
-
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { ReturnableEntry, ReturnableStatus } from '@/types/returnable';
+import { ReturnableEntry, ReturnableStatus, ReturnableType } from '@/types/returnable';
 import { 
   Table, 
   TableHeader, 
@@ -43,10 +42,10 @@ export default function ReturnablesTable({ status, showOverdueOnly = false }: Re
           regNo: '', // Not in DB schema
           driver: item['Driver'] || '',
           customer: item['Customer'] || '',
-          itemType: item['Item Type'] || 'Crate',
+          itemType: validateItemType(item['Item Type'] || 'Crate'),
           quantityOut: item['Quantity Out'] || 0,
           quantityReturned: item['Quantity Returned'] || 0,
-          status: item['Status'] || 'Pending Return',
+          status: validateStatus(item['Status'] || 'Pending Return'),
           notes: item['Notes'] || '',
           proofOfReturn: item['Proof of Return'] ? [item['Proof of Return']] : [],
           createdAt: new Date(), // Default to current date as it's not in DB
@@ -70,6 +69,18 @@ export default function ReturnablesTable({ status, showOverdueOnly = false }: Re
     loadReturnables();
   }, [toast]);
   
+  // Helper function to validate and ensure ReturnableType enum values
+  const validateItemType = (value: string): ReturnableType => {
+    const validTypes: ReturnableType[] = ['Crate', 'Pallet', 'Cylinder', 'Container', 'Box', 'Drum', 'Tote', 'Other'];
+    return validTypes.includes(value as ReturnableType) ? (value as ReturnableType) : 'Crate';
+  };
+  
+  // Helper function to validate and ensure ReturnableStatus enum values
+  const validateStatus = (value: string): ReturnableStatus => {
+    const validStatuses: ReturnableStatus[] = ['Pending Return', 'Returned', 'Damaged', 'Lost'];
+    return validStatuses.includes(value as ReturnableStatus) ? (value as ReturnableStatus) : 'Pending Return';
+  };
+
   // Filter returnables based on props
   let filteredReturnables = [...returnables];
   
@@ -142,10 +153,10 @@ export default function ReturnablesTable({ status, showOverdueOnly = false }: Re
           regNo: '',
           driver: newReturnable['Driver'] || '',
           customer: newReturnable['Customer'] || '',
-          itemType: newReturnable['Item Type'] || 'Crate',
+          itemType: validateItemType(newReturnable['Item Type'] || 'Crate'),
           quantityOut: newReturnable['Quantity Out'] || 0,
           quantityReturned: newReturnable['Quantity Returned'] || 0,
-          status: newReturnable['Status'] || 'Pending Return',
+          status: validateStatus(newReturnable['Status'] || 'Pending Return'),
           notes: newReturnable['Notes'] || '',
           proofOfReturn: newReturnable['Proof of Return'] ? [newReturnable['Proof of Return']] : [],
           createdAt: new Date(),
