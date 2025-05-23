@@ -13,7 +13,7 @@ interface ReturnableEntryModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSave: (data: any) => void;
-  returnable?: ReturnableEntry; // Add the returnable prop as optional
+  returnable?: ReturnableEntry;
 }
 
 export default function ReturnableEntryModal({ isOpen, onClose, onSave, returnable }: ReturnableEntryModalProps) {
@@ -28,6 +28,7 @@ export default function ReturnableEntryModal({ isOpen, onClose, onSave, returnab
     status: 'Pending Return' as ReturnableStatus,
     notes: ''
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // If a returnable is provided, populate the form with its data
   useEffect(() => {
@@ -42,6 +43,18 @@ export default function ReturnableEntryModal({ isOpen, onClose, onSave, returnab
         status: returnable.status || 'Pending Return',
         notes: returnable.notes || ''
       });
+    } else {
+      // Reset the form for new entries
+      setFormData({
+        tripId: '',
+        driver: '',
+        customer: '',
+        itemType: 'Crate',
+        quantityOut: 0,
+        quantityReturned: 0,
+        status: 'Pending Return',
+        notes: ''
+      });
     }
   }, [returnable]);
 
@@ -52,7 +65,7 @@ export default function ReturnableEntryModal({ isOpen, onClose, onSave, returnab
     });
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!formData.tripId || !formData.customer) {
       toast({
         title: "Missing Information",
@@ -62,23 +75,23 @@ export default function ReturnableEntryModal({ isOpen, onClose, onSave, returnab
       return;
     }
     
-    onSave({
-      ...formData,
-      id: returnable?.id || Math.random().toString(36).substring(2, 11),
-      date: returnable?.date || new Date(),
-      createdAt: returnable?.createdAt || new Date(),
-      updatedAt: new Date(),
-    });
-    
-    toast({
-      title: returnable ? "Returnable Entry Updated" : "Returnable Entry Added",
-      description: returnable 
-        ? "The returnable entry has been successfully updated" 
-        : "The returnable entry has been successfully created",
-      variant: "default"
-    });
-    
-    onClose();
+    try {
+      setIsSubmitting(true);
+      
+      await onSave({
+        ...formData,
+        id: returnable?.id || formData.tripId,
+        date: returnable?.date || new Date(),
+        createdAt: returnable?.createdAt || new Date(),
+        updatedAt: new Date(),
+      });
+      
+      onClose();
+    } catch (error) {
+      console.error('Error saving returnable:', error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -96,6 +109,7 @@ export default function ReturnableEntryModal({ isOpen, onClose, onSave, returnab
                 value={formData.tripId} 
                 onChange={(e) => handleChange('tripId', e.target.value)}
                 placeholder="Enter Trip ID" 
+                disabled={!!returnable} // Disable editing tripId for existing entries
               />
             </div>
             <div className="space-y-2">
@@ -199,8 +213,10 @@ export default function ReturnableEntryModal({ isOpen, onClose, onSave, returnab
           </div>
         </div>
         <DialogFooter>
-          <Button variant="outline" onClick={onClose}>Cancel</Button>
-          <Button onClick={handleSubmit}>{returnable ? 'Update' : 'Save'} Entry</Button>
+          <Button variant="outline" onClick={onClose} disabled={isSubmitting}>Cancel</Button>
+          <Button onClick={handleSubmit} disabled={isSubmitting}>
+            {isSubmitting ? 'Saving...' : returnable ? 'Update' : 'Save'} Entry
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
